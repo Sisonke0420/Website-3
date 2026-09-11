@@ -46,6 +46,23 @@ img {
   display: block;
 }
 
+.image-link {
+  display: block;
+  cursor: pointer;
+}
+
+.image-link img {
+  transition:
+    transform 0.35s ease,
+    filter 0.35s ease;
+}
+
+.image-link:hover img,
+.image-link:focus-visible img {
+  transform: scale(1.035);
+  filter: saturate(1.12) contrast(1.04);
+}
+
 button,
 input,
 textarea,
@@ -297,6 +314,19 @@ select {
 
 .hero-photo {
   filter: saturate(0.9) contrast(1.06);
+}
+
+.hero-image-link,
+.product-image-link {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.product-image-link img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .visual-card {
@@ -1084,6 +1114,86 @@ select {
   font-size: 0.78rem;
 }
 
+.secret-page {
+  background:
+    radial-gradient(
+      circle at 80% 12%,
+      rgba(239, 93, 46, 0.18),
+      transparent 25%
+    ),
+    var(--bg);
+}
+
+.secret-hero {
+  min-height: 58vh;
+  display: grid;
+  align-content: center;
+  max-width: 900px;
+}
+
+.secret-hero h1,
+.route-hero h1 {
+  max-width: 800px;
+  margin: 0;
+  font-size: clamp(3.4rem, 8vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+}
+
+.secret-note,
+.route-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 52px;
+}
+
+.secret-note img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  border-radius: 28px;
+}
+
+.secret-note h2 {
+  margin: 0 0 18px;
+  font-size: clamp(2.2rem, 4vw, 4rem);
+  line-height: 0.98;
+  letter-spacing: -0.07em;
+}
+
+.secret-note p:not(.section-kicker) {
+  color: var(--muted);
+  font-size: 1.08rem;
+}
+
+.route-hero {
+  min-height: 58vh;
+  grid-template-columns: 1.3fr 0.7fr;
+}
+
+.route-mark {
+  display: grid;
+  gap: 6px;
+  padding: 34px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.route-mark span,
+.route-mark small {
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.route-mark strong {
+  font-size: clamp(2.4rem, 5vw, 5rem);
+  line-height: 1;
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(18px);
@@ -1114,6 +1224,8 @@ select {
   .product-detail,
   .detail-story,
   .journal-feature,
+  .secret-note,
+  .route-hero,
   .cart-layout,
   .journal-grid,
   .product-grid,
