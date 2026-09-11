@@ -143,6 +143,39 @@ function renderCart() {
   if (totalElement) totalElement.textContent = formatPrice(subtotal);
 }
 
+function renderCheckout() {
+  const checkoutItems = document.querySelector("[data-checkout-items]");
+  if (!checkoutItems) {
+    return;
+  }
+
+  const cart = getCart();
+  checkoutItems.innerHTML = cart.length
+    ? cart
+        .map(
+          (item) => `
+            <div class="checkout-item">
+              <div class="checkout-item-image"><img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}" /><span>${item.quantity}</span></div>
+              <div><strong>${escapeHTML(item.name)}</strong><small>${escapeHTML(item.color)} / ${escapeHTML(item.size)}</small></div>
+              <strong>${formatPrice(item.price * item.quantity)}</strong>
+            </div>`,
+        )
+        .join("")
+    : '<p class="checkout-empty">Your cart is empty. <a href="shop.html">Return to shop</a></p>';
+
+  const subtotal = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0,
+  );
+  document
+    .querySelectorAll(
+      "[data-checkout-subtotal], [data-checkout-total], [data-checkout-button-total]",
+    )
+    .forEach((element) => {
+      element.textContent = formatPrice(subtotal);
+    });
+}
+
 function updateShopProducts() {
   const shopGrid = document.querySelector(".product-grid");
   const filterButtons = document.querySelectorAll(".chip[data-filter]");
@@ -245,7 +278,29 @@ document
 
 updateCartCount();
 renderCart();
+renderCheckout();
 updateShopProducts();
+
+const checkoutForm = document.querySelector("[data-checkout-form]");
+if (checkoutForm) {
+  checkoutForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const successMessage = document.querySelector("[data-checkout-success]");
+    if (!checkoutForm.reportValidity() || !successMessage) {
+      return;
+    }
+    checkoutForm
+      .querySelectorAll(
+        ".checkout-section, .checkout-submit, .checkout-disclaimer",
+      )
+      .forEach((element) => {
+        element.hidden = true;
+      });
+    successMessage.hidden = false;
+    localStorage.removeItem(cartStorageKey);
+    updateCartCount([]);
+  });
+}
 
 const revealItems = document.querySelectorAll(".reveal");
 
