@@ -531,14 +531,16 @@ select {
 
 .highlight-inner {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 24px;
   padding: 28px 30px;
   border-radius: 32px;
   background: linear-gradient(135deg, #171717 0%, #2e2e2e 100%);
   color: white;
   box-shadow: var(--shadow);
+  text-align: center;
 }
 
 .highlight-inner .section-kicker {
@@ -1112,6 +1114,41 @@ select {
   margin: 0;
   color: var(--muted);
   font-size: 0.78rem;
+}
+
+.stat-item,
+.product-card,
+.feature-card,
+.timeline-item,
+.contact-card,
+.info-panel,
+.journal-card,
+.cart-item,
+.cart-summary,
+.visual-card,
+.floating-card,
+.route-mark {
+  position: relative;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.stat-item:hover,
+.product-card:hover,
+.feature-card:hover,
+.timeline-item:hover,
+.contact-card:hover,
+.info-panel:hover,
+.journal-card:hover,
+.cart-item:hover,
+.cart-summary:hover,
+.visual-card:hover,
+.floating-card:hover,
+.route-mark:hover {
+  z-index: 2;
+  transform: scale(1.025);
+  box-shadow: var(--shadow);
 }
 
 .secret-page {
