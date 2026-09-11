@@ -48,7 +48,11 @@ body.theme-light {
   --shadow-soft: 0 18px 32px rgba(20, 24, 27, 0.08);
   background:
     radial-gradient(circle at top, rgba(239, 93, 46, 0.1), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(120, 155, 255, 0.1), transparent 28%),
+    radial-gradient(
+      circle at bottom right,
+      rgba(120, 155, 255, 0.1),
+      transparent 28%
+    ),
     var(--bg);
   color-scheme: light;
 }
