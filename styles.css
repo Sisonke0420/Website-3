@@ -746,7 +746,9 @@ select {
   border-radius: 24px;
   background: var(--panel-soft);
   box-shadow: var(--shadow-soft);
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
 }
 
 .motion-card-tall {
