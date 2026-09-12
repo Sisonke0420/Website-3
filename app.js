@@ -201,7 +201,7 @@ function addToCart(product) {
 }
 
 function formatPrice(amount) {
-  return `$${amount.toFixed(2).replace(".00", "")}`;
+  return `R${amount.toFixed(2).replace(".00", "")}`;
 }
 
 function escapeHTML(value) {
