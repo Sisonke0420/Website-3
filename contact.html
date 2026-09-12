@@ -48,25 +48,46 @@
       <section class="container contact-layout section-space">
         <div class="contact-card reveal">
           <h2>Send a message</h2>
-          <form class="contact-form">
+          <form class="contact-form" data-contact-form>
             <label>
               Name
-              <input type="text" placeholder="Your name" />
+              <input
+                type="text"
+                placeholder="Your name"
+                autocomplete="name"
+                required
+              />
             </label>
             <label>
               Email
-              <input type="email" placeholder="you@example.com" />
+              <input
+                type="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+              />
             </label>
             <label>
               Subject
-              <input type="text" placeholder="How can we help?" />
+              <input type="text" placeholder="How can we help?" required />
             </label>
             <label>
               Message
-              <textarea rows="5" placeholder="Tell us more..."></textarea>
+              <textarea
+                rows="5"
+                placeholder="Tell us more..."
+                required
+              ></textarea>
             </label>
             <button class="btn btn-primary" type="submit">Send enquiry</button>
           </form>
+          <div class="form-success" data-contact-success hidden role="status">
+            <strong>Message received.</strong>
+            <p>
+              This demo does not send email yet, but your enquiry is ready for a
+              future backend.
+            </p>
+          </div>
         </div>
 
         <aside class="info-panel reveal">
@@ -76,11 +97,15 @@
           </div>
           <div class="info-box">
             <h3>Email</h3>
-            <p>hello@peakperformance.com</p>
+            <p>
+              <a href="mailto:hello@peakperformance.com"
+                >hello@peakperformance.com</a
+              >
+            </p>
           </div>
           <div class="info-box">
             <h3>Call</h3>
-            <p>+1 (212) 555-0199</p>
+            <p><a href="tel:+12125550199">+1 (212) 555-0199</a></p>
           </div>
         </aside>
       </section>

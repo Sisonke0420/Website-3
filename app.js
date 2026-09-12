@@ -3,9 +3,124 @@ const menuButton = document.querySelector(".menu-toggle");
 const navLinks = document.querySelectorAll(".nav-links a");
 const cartStorageKey = "peak-performance-cart";
 
+const productCatalog = {
+  "velocity-runner": {
+    name: "Velocity Runner",
+    category: "Running / Peak Motion",
+    price: 178,
+    image: "assets/img5.webp",
+    alt: "Runner wearing the Velocity Runner shoes",
+    badge: "Best seller",
+    lead: "A responsive daily trainer for fast miles, long loops, and every plan that starts with one more step.",
+    storyTitle: "Light on your feet. Serious under pressure.",
+    story: [
+      "Velocity pairs a springy foam platform with a stable heel and a breathable upper that keeps pace when the route gets longer.",
+      "Designed in New York and tested across road, track, and city miles.",
+    ],
+    sizes: ["7", "8", "9", "10", "11", "12"],
+  },
+  "motion-tank": {
+    name: "Motion Tank",
+    category: "Training / Peak Motion",
+    price: 96,
+    image: "assets/img9.webp",
+    alt: "Athlete training in the Motion Tank",
+    badge: "Training essential",
+    lead: "A breathable training layer with a clean fit that stays comfortable through every set, sprint, and reset.",
+    storyTitle: "Freedom in every repetition.",
+    story: [
+      "The Motion Tank uses lightweight stretch fabric and mapped airflow to keep hard sessions feeling uncluttered.",
+      "Cut for movement, finished for the hours before and after training.",
+    ],
+    sizes: ["XS", "S", "M", "L", "XL"],
+  },
+  "trail-pack": {
+    name: "Trail Pack",
+    category: "Essentials / Peak Motion",
+    price: 134,
+    image: "assets/img10.webp",
+    alt: "Runner outdoors with the Trail Pack",
+    badge: "Adventure ready",
+    lead: "Hydration-ready storage for long days on the move, with room for the essentials and nothing that slows you down.",
+    storyTitle: "Carry less. Go farther.",
+    story: [
+      "Trail Pack balances close-to-body stability with easy access to the things you need between miles.",
+      "Built for commutes, trailheads, and the unplanned extension of the route.",
+    ],
+    sizes: ["One size"],
+  },
+  "forge-hoodie": {
+    name: "Forge Hoodie",
+    category: "Training / Peak Motion",
+    price: 118,
+    image: "assets/img6.webp",
+    alt: "Runner wearing the Forge Hoodie outdoors",
+    badge: "New layer",
+    lead: "Warmth, freedom, and a tailored fit that stays sharp from warm-up to wind-down.",
+    storyTitle: "Built for the in-between.",
+    story: [
+      "Forge Hoodie adds soft warmth without the bulk, making it an easy layer for changing weather and changing plans.",
+      "A structured silhouette keeps it ready for the street after the session.",
+    ],
+    sizes: ["XS", "S", "M", "L", "XL"],
+  },
+  "pulse-gloves": {
+    name: "Pulse Gloves",
+    category: "Recovery / Peak Motion",
+    price: 72,
+    image: "assets/img8.webp",
+    alt: "Athlete wearing Pulse Gloves before training",
+    badge: "Cold weather essential",
+    lead: "Grip and support that keep your focus where it belongs when the temperature drops.",
+    storyTitle: "Keep your hands in the work.",
+    story: [
+      "Pulse Gloves combine a secure palm grip with flexible warmth for early starts and late finishes.",
+      "Touch-compatible fingertips keep your route, music, and messages close.",
+    ],
+    sizes: ["S", "M", "L"],
+  },
+  "summit-bottle": {
+    name: "Summit Bottle",
+    category: "Hydration / Peak Motion",
+    price: 39,
+    image: "assets/img4.webp",
+    alt: "Summit Bottle beside a group of runners",
+    badge: "Daily essential",
+    lead: "Insulated performance in a sleek bottle built for daily use, long sessions, and wherever the day takes you.",
+    storyTitle: "Stay ready for another mile.",
+    story: [
+      "Summit Bottle keeps water cold and easy to carry with a slim profile that fits into your everyday rhythm.",
+      "Durable, reusable, and sized for the work between the big efforts.",
+    ],
+    sizes: ["One size"],
+  },
+};
+
+document.body.insertAdjacentHTML(
+  "afterbegin",
+  '<div class="demo-banner" role="status"><strong>Demo experience</strong><span>Front-end preview only. No orders or payments are processed.</span></div>',
+);
+
+document.querySelectorAll(".site-footer .footer-wrap").forEach((footer) => {
+  footer.insertAdjacentHTML(
+    "beforeend",
+    '<nav class="footer-links" aria-label="Support and policies"><a href="policies.html#shipping">Shipping & returns</a><a href="policies.html#faq">FAQ</a><a href="policies.html#privacy">Privacy</a><a href="policies.html#terms">Terms</a></nav>',
+  );
+});
+
 if (menuButton && header) {
+  const mainNav = document.querySelector(".main-nav");
+  if (mainNav) {
+    mainNav.id = "main-navigation";
+    menuButton.setAttribute("aria-controls", mainNav.id);
+    menuButton.setAttribute("aria-expanded", "false");
+  }
   menuButton.addEventListener("click", () => {
     header.classList.toggle("nav-open");
+    menuButton.setAttribute(
+      "aria-expanded",
+      String(header.classList.contains("nav-open")),
+    );
   });
 }
 
@@ -141,6 +256,12 @@ function renderCart() {
   const totalElement = document.querySelector("[data-cart-total]");
   if (subtotalElement) subtotalElement.textContent = formatPrice(subtotal);
   if (totalElement) totalElement.textContent = formatPrice(subtotal);
+  const checkoutLink = document.querySelector("[data-checkout-link]");
+  if (checkoutLink) {
+    checkoutLink.href = cart.length ? "checkout.html" : "shop.html";
+    checkoutLink.textContent = cart.length ? "Checkout" : "Continue shopping";
+    checkoutLink.setAttribute("aria-disabled", String(!cart.length));
+  }
 }
 
 function renderCheckout() {
@@ -174,6 +295,11 @@ function renderCheckout() {
     .forEach((element) => {
       element.textContent = formatPrice(subtotal);
     });
+  const submitButton = document.querySelector(".checkout-submit");
+  if (submitButton && !cart.length) {
+    submitButton.disabled = true;
+    submitButton.textContent = "Add items to checkout";
+  }
 }
 
 function updateShopProducts() {
@@ -213,6 +339,47 @@ function updateShopProducts() {
   });
 }
 
+function renderProductDetails() {
+  const productPage = document.querySelector("[data-product-page]");
+  if (!productPage) return;
+
+  const productKey = new URLSearchParams(window.location.search).get("product");
+  const product =
+    productCatalog[productKey] || productCatalog["velocity-runner"];
+  const setText = (selector, value) => {
+    const element = productPage.querySelector(selector);
+    if (element) element.textContent = value;
+  };
+
+  document.title = `${product.name} | Peak Performance`;
+  setText("[data-product-category]", product.category);
+  setText("[data-product-name]", product.name);
+  setText("[data-product-price]", formatPrice(product.price));
+  setText("[data-product-lead]", product.lead);
+  setText("[data-product-badge]", product.badge);
+  const storyTitle = document.querySelector("[data-product-story-title]");
+  if (storyTitle) storyTitle.textContent = product.storyTitle;
+  productPage.querySelector("[data-product-image]").src = product.image;
+  productPage.querySelector("[data-product-image]").alt = product.alt;
+  document.querySelector("[data-product-story]").innerHTML = product.story
+    .map((paragraph) => `<p>${escapeHTML(paragraph)}</p>`)
+    .join("");
+
+  productPage.querySelector(".size-grid").innerHTML = product.sizes
+    .map(
+      (size, index) =>
+        `<button type="button" class="${index === 0 ? "active" : ""}" aria-pressed="${index === 0}">${size}</button>`,
+    )
+    .join("");
+
+  const addButton = productPage.querySelector(".add-to-cart");
+  addButton.dataset.productId = productKey || "velocity-runner";
+  addButton.dataset.productName = product.name;
+  addButton.dataset.productPrice = product.price;
+  addButton.dataset.productCategory = product.category.split(" /")[0];
+  addButton.dataset.productImage = product.image;
+}
+
 document.querySelectorAll(".chip[data-filter]").forEach((filterButton) => {
   filterButton.addEventListener("click", () => {
     document.querySelectorAll(".chip[data-filter]").forEach((button) => {
@@ -244,6 +411,13 @@ document.addEventListener("click", (event) => {
     return;
   }
 
+  if (cartAction.dataset.cartAction === "clear") {
+    saveCart([]);
+    renderCart();
+    renderCheckout();
+    return;
+  }
+
   const cartItem = cartAction.closest("[data-cart-id]");
   const cart = getCart();
   const itemIndex = cart.findIndex(
@@ -265,6 +439,8 @@ document.addEventListener("click", (event) => {
   renderCart();
 });
 
+renderProductDetails();
+
 document
   .querySelectorAll(".size-grid button, .swatches button")
   .forEach((option) => {
@@ -273,6 +449,9 @@ document
         .querySelectorAll("button")
         .forEach((sibling) => sibling.classList.remove("active"));
       option.classList.add("active");
+      option.parentElement.querySelectorAll("button").forEach((sibling) => {
+        sibling.setAttribute("aria-pressed", sibling === option);
+      });
     });
   });
 
@@ -299,6 +478,17 @@ if (checkoutForm) {
     successMessage.hidden = false;
     localStorage.removeItem(cartStorageKey);
     updateCartCount([]);
+  });
+}
+
+const contactForm = document.querySelector("[data-contact-form]");
+if (contactForm) {
+  contactForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!contactForm.reportValidity()) return;
+    contactForm.hidden = true;
+    const successMessage = document.querySelector("[data-contact-success]");
+    if (successMessage) successMessage.hidden = false;
   });
 }
 
